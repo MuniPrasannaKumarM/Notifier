@@ -2,6 +2,8 @@ package com.notifier.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
@@ -10,8 +12,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.notifier.dao.notebooksDao;
+import com.notifier.model.notes;
 
 /**
  * Servlet implementation class NoteBooks
@@ -23,7 +27,11 @@ public class NoteBooks extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-	String email = "m.muniprasanna@gmail.com";
+	String email = "";
+	public  String emailme(String email) {
+		this.email = email;
+    	return this.email;
+    }
     public NoteBooks() {
         super();
         // TODO Auto-generated constructor stub
@@ -34,7 +42,9 @@ public class NoteBooks extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
+		ArrayList<notes> note = new ArrayList<notes>();
+		ArrayList<notes> note1 = new ArrayList<notes>();
+		ArrayList<notes> remaindernotes = new ArrayList<notes>();
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/notebook_page.jsp");
 		
@@ -42,6 +52,34 @@ public class NoteBooks extends HttpServlet {
 		ArrayList<Integer> count = new ArrayList<Integer>(); 
 		ArrayList<String> notebook = new ArrayList<String>();
 		notebooksDao n = new notebooksDao();
+		HttpSession session=request.getSession(false);  
+	    String name=(String)session.getAttribute("name");
+	    String email1 = (String)session.getAttribute("email");
+	    NoteBooks not = new NoteBooks();
+	    email = not.emailme(email1);
+	    LocalDate date = LocalDate.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		String dateme = date.format(formatter);
+	    try {
+			note = n.getNotes(email);
+			for(notes noteme:note)
+			{
+				String d = noteme.getRemainderdate();
+				
+				if(d.equals(dateme))
+				{
+					
+					remaindernotes.add(noteme);
+				}
+				
+			}
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		try {
 			notebook = n.getNoteBook(email);
 			
@@ -54,7 +92,9 @@ public class NoteBooks extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		request.setAttribute("remaindernotes", remaindernotes);
+		request.setAttribute("notify", remaindernotes.size());
+		request.setAttribute("name", name);
 		request.setAttribute("notebooks", notebook);
 		request.setAttribute("count", count);
 		request.setAttribute("length", notebook.size());

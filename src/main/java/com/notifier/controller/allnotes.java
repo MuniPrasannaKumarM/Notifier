@@ -2,8 +2,6 @@ package com.notifier.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -21,16 +19,16 @@ import com.notifier.dao.all_notes_Dao;
 import com.notifier.model.notes;
 
 /**
- * Servlet implementation class dashboard
+ * Servlet implementation class allnotes
  */
-@WebServlet("/dashboard")
-public class dashboard extends HttpServlet {
+@WebServlet("/notes")
+public class allnotes extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public dashboard() {
+    public allnotes() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -38,52 +36,45 @@ public class dashboard extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-      
     String email = "";
-    public  String emailme(String email) {
+	public  String emailme(String email) {
 		this.email = email;
     	return this.email;
-    }
+    } 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
-		HttpSession session=request.getSession(false);  
-	    String name=(String)session.getAttribute("name");
-	    String email1 = (String)session.getAttribute("email");
-	    dashboard d1 = new dashboard();
-	    email = d1.emailme(email1);
-	    
 		ArrayList<notes> note = new ArrayList<notes>();
 		ArrayList<notes> note1 = new ArrayList<notes>();
 		ArrayList<notes> remaindernotes = new ArrayList<notes>();
 		all_notes_Dao a = new all_notes_Dao();
 		LocalDate date = LocalDate.now();
+		HttpSession session=request.getSession(false);  
+	    String name=(String)session.getAttribute("name");
+	    String email1 = (String)session.getAttribute("email");
+	    allnotes an = new allnotes();
+	    email = an.emailme(email1);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
-		Date current = null;
+		String nbname = request.getParameter("nbname");
+		System.out.println("notebook "+nbname);
 		String dateme = date.format(formatter);
-		try {
-			 current= sdformat.parse(dateme);
-		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-	      
+			try {
+				note1 = a.getNotes(email,nbname);
+				
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
 		
 		try {
 			note = a.getNotes(email);
-			System.out.println("dashboard   "+email);
 			for(notes noteme:note)
 			{
 				String d = noteme.getRemainderdate();
-				Date start = sdformat.parse(noteme.getStartdate());
-				Date end = sdformat.parse(noteme.getEnddate());
-				
-				
-				if(current.compareTo(start)>=0 && current.compareTo(end)<=0) {
-					note1.add(noteme);
-					System.out.println("name "+noteme.getName());
-				}
 				
 				if(d.equals(dateme))
 				{
@@ -98,17 +89,20 @@ public class dashboard extends HttpServlet {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
-		
+		if((!(nbname == null)))
+		{
 			request.setAttribute("notes", note1);
-		
+			request.setAttribute("notebooknameme", nbname);
+		}
+		else
+		{
+			request.setAttribute("notes", note);
+		}
 		request.setAttribute("name", name);
 		request.setAttribute("remaindernotes", remaindernotes);
 		request.setAttribute("notify", remaindernotes.size());
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/dashboard.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/all_notes.jsp");
 		dispatcher.forward(request, response);
 	}
 
@@ -117,7 +111,7 @@ public class dashboard extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-String search = request.getParameter("search");
+		String search = request.getParameter("search");
 		
 		if(search!=null)
 		{
@@ -128,7 +122,11 @@ String search = request.getParameter("search");
 		all_notes_Dao a = new all_notes_Dao();
 		LocalDate date = LocalDate.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		
+		HttpSession session=request.getSession(false);  
+	    String name=(String)session.getAttribute("name");
+	    String email1 = (String)session.getAttribute("email");
+	    allnotes an = new allnotes();
+	    email = an.emailme(email1);
 		String dateme = date.format(formatter);
 		try {
 			note = a.getNotes(email);
@@ -154,10 +152,11 @@ String search = request.getParameter("search");
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		request.setAttribute("name", name);
 		request.setAttribute("notes", searchnote);
 		request.setAttribute("remaindernotes", remaindernotes);
 		request.setAttribute("notify", remaindernotes.size());
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/dashboard.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/all_notes.jsp");
 		dispatcher.forward(request, response);
 		}
 		String checkeditNotebook = request.getParameter("editnoteme");
@@ -207,3 +206,4 @@ String search = request.getParameter("search");
 	}
 
 }
+

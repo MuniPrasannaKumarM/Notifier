@@ -11,20 +11,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.notifier.dao.EditUserDao;
-import com.notifier.model.SignUpBean;
+import com.notifier.dao.newnoteDao;
 
 /**
- * Servlet implementation class editUser
+ * Servlet implementation class newnote
  */
-@WebServlet("/edituser")
-public class editUser extends HttpServlet {
+@WebServlet("/newnote")
+public class newnote extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public editUser() {
+    public newnote() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -40,30 +39,19 @@ public class editUser extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/editUser.jsp");
-		EditUserDao ed = new EditUserDao();
+		String nbname = request.getParameter("nbname");
 		HttpSession session=request.getSession(false);  
 	    String name=(String)session.getAttribute("name");
 	    String email1 = (String)session.getAttribute("email");
-	    editUser edit = new editUser();
-	    email = edit.emailme(email1);
-		SignUpBean s = null;
-		try {
-			 s= ed.user(email);
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	    newnote newnot = new newnote();
+	    email = newnot.emailme(email1);
+		if((!(nbname == null)))
+		{
+			request.setAttribute("nbname", nbname);
+			System.out.println("nbname "+nbname);
 		}
-		request.setAttribute("nameme", name);
-		request.setAttribute("name", s.getName());
-		request.setAttribute("username", s.getUsername());
-		request.setAttribute("mobile", s.getMobile());
-		request.setAttribute("email", s.getEmail());
-		request.setAttribute("password", s.getPassword());
-		dispatcher.forward(request,response);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/newnote.jsp");
+		dispatcher.forward(request, response);
 	}
 
 	/**
@@ -71,15 +59,24 @@ public class editUser extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String name = request.getParameter("name");
-		String username = request.getParameter("username");
-		String email = request.getParameter("email");
-		System.out.println("Email  "+email);
-		String mobile = request.getParameter("mobile");
-		String password = request.getParameter("password");
-		EditUserDao ed = new EditUserDao();
+		String notebookname = request.getParameter("notebookname");
+		String notename = request.getParameter("notename");
+		String start = request.getParameter("start");
+		String end = request.getParameter("end");
+		String remainder = request.getParameter("remainder");
+		String status = request.getParameter("status");
+		
+		String tag = request.getParameter("tag");
+		String desc = request.getParameter("desc");
+		newnoteDao newnote = new newnoteDao();
+		HttpSession session=request.getSession(false);  
+	    String name=(String)session.getAttribute("name");
+	    String email1 = (String)session.getAttribute("email");
+		newnote newnot = new newnote();
+		
+	    email = newnot.emailme(email1);
 		try {
-			ed.updateUser(name, username, email, mobile, password);
+			newnote.newnote(email, notename, notebookname, start, end, remainder, status, tag, desc);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -87,7 +84,17 @@ public class editUser extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		doGet(request,response);
+String nbname = request.getParameter("nbname");
+		
+		if((!(nbname == null)))
+		{
+			response.sendRedirect("/Notifier/notebooks");
+		}
+		else
+		{
+			response.sendRedirect("/Notifier/notebooks");
+		}
 	}
 
 }
+

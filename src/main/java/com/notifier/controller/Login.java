@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.notifier.dao.loginDao;
 import com.notifier.model.loginBean;
@@ -53,6 +54,9 @@ public class Login extends HttpServlet {
 		try {
 			if(log.checkIfExist(l))
 			{
+				HttpSession session=request.getSession();  
+		        session.setAttribute("email",log.getEmail(l));
+		        session.setAttribute("name", log.getName(l));
 				response.sendRedirect("/Notifier/dashboard");
 			}
 			else

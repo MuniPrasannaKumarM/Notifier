@@ -121,10 +121,10 @@ $('#deleteModal').on('show.bs.modal', function (event) {
                 <li class="nav-item ">
                   <a class="nav-link" href="#" onclick="buttOpen()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16" style="margin-top: 5px;">
                     <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
-                  </svg>20</a>
+                  </svg>${notify }</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="login.html"><i style="font-size: 25px;margin-top: 5px;" class="fa fa-sign-out"></i> Logout</a>
+                  <a class="nav-link" href="/Notifier/login"><i style="font-size: 25px;margin-top: 5px;" class="fa fa-sign-out"></i> Logout</a>
                 </li>
             
               </ul>
@@ -157,29 +157,27 @@ $('#deleteModal').on('show.bs.modal', function (event) {
             </div>
           </div>
           
-          <div id="linking" style="display: none; position:absolute;"class="offset-sm-9"  >
+           <div id="linking" style="display: none; position:absolute;"class="offset-sm-9"  >
                 <div class="card " style="width: 20rem;" >
                     <div class="card-title offset-sm-1 mt-2">Remainder</div>
                     <hr>
-                    <div class="card-body text-center"><h5>NPTEL</h5>
-                        <b>2021-08-07</b>
+                    <c:forEach var="remainderitem" items="${remaindernotes}">
+                    <div class="card-body text-center"><h5>${ remainderitem.getName()}</h5>
+                        <b>${ remainderitem.getRemainderdate()}</b>
                     </div>
-
+				
                     <hr>
-                    <div class="card-body text-center"><h5>NPTEL</h5>
-                        <b>2021-08-07</b>
-                    </div>
-
-                    <hr>
+                    </c:forEach>
+                    
                 </div>
           </div>
           <div id="mySidenav" class="sidenav">
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-            <h2>Hii Muni Prasanna Kumar M</h2>
-            <a href="#">Dashboard</a>
-            <a href="#">NoteBooks</a>
-            <a href="#">Notes</a>
-            <a href="#">Edit User</a>
+            <h2>Hii ${name }</h2>
+            <a href="/Notifier/dashboard">Dashboard</a>
+            <a href="/Notifier/notebooks">NoteBooks</a>
+            <a href="notes">Notes</a>
+            <a href="edituser">Edit User</a>
           </div>
           
           <div id="main">
@@ -211,7 +209,7 @@ $('#deleteModal').on('show.bs.modal', function (event) {
                             <div class="card-body mb-3">
                                 <table class="mb-4">
                                     <tr>
-                                <td><h5 class="" style="color: blue; padding-right:100px ;" id="new_note" name="new_note" >${categoryName}</h5></td>                              
+                                <td><a href="/Notifier/notes?nbname=${categoryName}" class="" style="color: blue; padding-right:100px ;" id="new_note" name="new_note" >${categoryName}</a></td>                              
                             </tr>
                             
                             </table>

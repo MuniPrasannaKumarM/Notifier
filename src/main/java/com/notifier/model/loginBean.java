@@ -1,6 +1,13 @@
 package com.notifier.model;
 
 public class loginBean {
+	private String name;
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
 	private String email;
 	private String password;
 	public String getEmail() {

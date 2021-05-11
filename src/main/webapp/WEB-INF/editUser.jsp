@@ -80,11 +80,11 @@ function closeNav() {
 <body style="background-color: grey;">
         <div id="mySidenav" class="sidenav">
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-            <h2>Hii Muni Prasanna Kumar M</h2>
-            <a href="#">Dashboard</a>
-            <a href="#">NoteBooks</a>
-            <a href="#">Notes</a>
-            <a href="#">Edit User</a>
+            <h2>Hii ${nameme}</h2>
+            <a href="/Notifier/dashboard">Dashboard</a>
+            <a href="/Notifier/notebooks">NoteBooks</a>
+            <a href="notes">Notes</a>
+            <a href="edituser">Edit User</a>
           </div>
           <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
           <div id="main">

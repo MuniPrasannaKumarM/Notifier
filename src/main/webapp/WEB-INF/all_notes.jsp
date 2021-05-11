@@ -90,7 +90,7 @@ function buttOpen(){
 }
 
         </script>
-<title>Dashboard</title>
+<title>All Notes</title>
 </head>
 <body>
  <nav class="navbar navbar-expand-lg  " style="background-color: lightgrey;">
@@ -168,7 +168,7 @@ function buttOpen(){
                         <form class=" " method="POST">
                             <table>
                                 <tr>
-                                
+                                <td><a href="/Notifier/newnote?nbname=${notebooknameme}" class="btn btn-info" > ADD NOTE</></td>
                                 <td><input type="text" placeholder="Search..." name="search" style="width: max-content;" class="form-control"></td><td><button type="submit" class="btn btn-success">Search</button></td>
                                 </tr>
                             </table>

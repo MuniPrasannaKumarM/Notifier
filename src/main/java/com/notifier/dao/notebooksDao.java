@@ -8,7 +8,34 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import com.notifier.model.notes;
+
 public class notebooksDao {
+	public ArrayList<notes> getNotes(String email) throws ClassNotFoundException, SQLException
+	{
+		ArrayList<notes> note = new ArrayList<notes>();
+		Class.forName("com.mysql.jdbc.Driver");  
+		Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/notifier","root","root");
+		String query = "Select * from notes where email = '"+email+"'";
+		Statement stmt = con.createStatement();
+		
+        ResultSet rs = stmt.executeQuery(query);
+        while(rs.next())
+        {
+        	notes n = new notes();
+        	n.setName(rs.getString("notename"));
+        	n.setEmail(rs.getString("email"));
+        	n.setNotebookname(rs.getString("notebookname"));
+        	n.setStartdate(rs.getString("startdate"));
+        	n.setEnddate(rs.getString("enddate"));
+        	n.setRemainderdate(rs.getString("remainderdate"));
+        	n.setStatus(rs.getString("status"));
+        	n.setTag(rs.getString("tag"));
+        	n.setDescription(rs.getString("description"));
+        	note.add(n);
+        }
+		return note;
+	}
 	public ArrayList<String> getNoteBook(String email) throws ClassNotFoundException, SQLException {
 		ArrayList<String> notebooknames = new ArrayList<String>();
 		Class.forName("com.mysql.jdbc.Driver");  

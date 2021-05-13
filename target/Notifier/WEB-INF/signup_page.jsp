@@ -78,7 +78,7 @@
 </head>
 <body>
 	<div class="d-flex justify-content-center">
-            <h1 style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Remaind Me</h1>
+            <h1 style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Remind Me</h1>
         </div>
         <div class="d-flex justify-content-center mt-5">
             <div class="card" style="width: 30rem; background-color:lemonchiffon;">
